@@ -115,8 +115,11 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
-# CM Hardware
-BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
+# Enable real time lockscreen charging current values
+BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
+
+# Tap to wake
+#BOARD_HARDWARE_CLASS += $(PLATFORM_PATH)/cmhw
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
 # Crypto
@@ -139,7 +142,7 @@ NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
-  ifeq ($(call match-word-in-list,$(TARGET_BUILD_VARIANT),user),true)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
     endif
